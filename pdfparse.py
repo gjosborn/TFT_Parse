@@ -1,19 +1,13 @@
-import tkinter
-
 import camelot
-
 
 # This is reading in the table 'Approximate Losses in Muzzle Velocity
 # Due to the formatting of the tables, each one will have to be dealt with individually,
 # but it should carry over between different TFTs
 
 
-# tables[0].to_csv('testCSV.csv')
-import pandas
+import pandas as pd
 import matplotlib.pyplot as plt
-from tkinter import *
 
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 def read_approx_loss(filename):
@@ -21,38 +15,22 @@ def read_approx_loss(filename):
     # print(approx_loss[0])
     table_df = approx_loss[0].df[2:9]
     # print(table_df.to_string(index=True))
-    headers = pandas.DataFrame
+    # add the headers by grabbing the column headers from the first few rows of the dataframe
+    headers = pd.DataFrame
     print(table_df[0:5])
 
-def read_exp(filename):
+
+def text_edge_graph(filename):
     approx_loss = camelot.read_pdf(filename, pages='28', flavor='stream')
     table_df = approx_loss[0].df
-    print(table_df)
-    camelot.plot(approx_loss[0], kind='textedge').show()
+    camelot.plot(approx_loss[0], kind='textedge')
+    plt.show(block=True)
+
 
 if __name__ == '__main__':
+    tft_file = 'FT 155-AM-3 w.changes1,2.pdf'
+    read_approx_loss(tft_file)
+    text_edge_graph(tft_file)
 
-    filename = 'FT 155-AM-3 w.changes1,2.pdf'
-    # read_exp(tft_file)
-    # read_approx_loss(tft_file)
-
-
-    # Creating a Tkinter window
-    window = Tk()
-    window.title('Plotting in Tkinter')
-    window.geometry("500x500")
-
-    approx_loss = camelot.read_pdf(filename, pages='28', flavor='stream')
-    table_df = approx_loss[0].df
-    camPlot = camelot.plot(approx_loss[0], kind='textedge')
-    # plt.show(block=True)
-
-    canvas = FigureCanvasTkAgg(camPlot, master=window)
-    canvas.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
-    canvas.draw()
-    window.mainloop()
-
-
-# Next Step is to create a tkinter window that shows the textedge plot of the page and allows the user to pick the
-# table, area and the column separators and allow the user to process the table and store it as a pkl with a name of
-# their choosing
+    # The next step is to use the text_edge graph to more accurately choose table locations by choosing table areas and,
+    # column separators.
